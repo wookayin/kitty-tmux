@@ -13,10 +13,9 @@ import kitty.remote_control
 
 # back up original remote_control.encode_send
 kitty.remote_control._encode_send = kitty.remote_control.encode_send
-encode_send = kitty.remote_control.encode_send
 
 
-def tmux_aware_remote_control(send: Any) -> bytes:
+def tmux_aware_encode_send(send: Any) -> bytes:
     """Wrap a encode_send control sequence with tmux pass-through seqeuence."""
     import kitty.remote_control
     b = kitty.remote_control._encode_send(send)
@@ -32,7 +31,7 @@ def tmux_aware_remote_control(send: Any) -> bytes:
 
 # monkey-patch encode_send()
 if 'TMUX' in os.environ:
-    kitty.remote_control.encode_send = tmux_aware_remote_control
+    kitty.remote_control.encode_send = tmux_aware_encode_send
 
 
 if __name__ == '__main__':
